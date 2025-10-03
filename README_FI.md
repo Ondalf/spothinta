@@ -2,7 +2,7 @@
 
 HOX: Tää on osakseen "AI slop".
 
-#### Integraatio palauttaa hetkellisen `current_price` arvon. Sensori päivittää itsensä kerran varttiin huolimatta siitä, käytitkö tunnin vai vartin tarkkuutta API kutsussa.
+#### Integraatio palauttaa hetkellisen `current_price` arvon. Sensori päivittää itsensä kerran varttiin huolimatta siitä, käytitkö tunnin vai vartin tarkkuutta sensorin teon yhteydessä.
 
 ---
 
@@ -13,7 +13,7 @@ HOX: Tää on osakseen "AI slop".
 - **Kevyt:** Home Assistant ei tykkää isoista datamääristä, joten tämä tallentaa vain hetkellisen hinnan
 - **Vältä turhia API kutsuja:** vain yksi kutsu per sensori lähtee APIa kohti per päivä
 - [custom_components/nordpool](https://github.com/custom-components/nordpool) ei tykännyt varttihinnottelusta, koska tallennettava datamäärä oli yli 16kb/pvä ja halusin kuitenkin piirtää käyrän
-- Kokeile pythonia AI avusteisesti: wanhan kansan C/C++ koodaajana, en kokeile toista kertaa.
+- Kokeilla pythonia AI avusteisesti: wanhan kansan C/C++ koodaajana, en kokeile toista kertaa.
 
 ### Mikä toimii?
 - Integraation lisääminen "hub"ina Home Assistantiin
@@ -22,7 +22,7 @@ HOX: Tää on osakseen "AI slop".
   - Entity ID seuraa tätä nimeämiskäytäntöä, esim. `sensor.spot_price_se4_vat`
 - Käytä paikallista kakkua, ellei
   - Kakku ole tyhjä (käynnistyksen yhteydessä)
-  - Seuraavan päivän arvot ole saatavilla (16:30 eteenpäin)
+  - Seuraavan päivän arvot ole saatavilla (14:30 eteenpäin)
 - Arvot ovat EUR/kWh kiinteästi, koska tulevat sellaisena APIsta
 - Kaikki timestampit ovat UTC:na, jotta ehkä välttäisi sekaannukset aikavyöhykkeiden kanssa
   - Kun arvot haetaan API:sta, ne pyritään kääntämään oikealle aikavyöhykkeille
@@ -42,24 +42,24 @@ icon: mdi:flash
 friendly_name: Spot Price FI VAT
 ```
 
-### Nämä ovat hyvin mahdollisesti rikki
+### Nämä ovat hyvin mahdollisesti rikki ja voi estää käynnistymisen
+- Jos tämä plugari käynnistyessä jää käynnistymättä DNS virheen tjsp takia, se ei käynnisty ja disabloi ittensä
+  - Ja aika varmasti sama tapahtuu myös, jos päivittäinen API kutsu antaa virheen
+
+### TODO, ja muita suunnittelukikkareita, jotka eivät ole varsinaisia vikoja, jotka estäisi käynnistyksen
 - Outouksia min/max laskussa
   - Arvoihin käytetään koko datasettiä
   - Arvot luetaan vain verollisista hinnoista
 - En ole varmaa, osaako kakku tyhjätä itsensä
   - Pitänee varmaan kehittää tapa, jolla tyhjätä wanhat arvot pois
   - Kun huomisen hinnat tuli kakkuun, kakun koko tuplaantui (96 -> 192 arvoa)
-- Jos tämä plugari käynnistyessä jää käynnistymättä DNS virheen tjsp takia, se ei käynnisty ja disabloi ittensä
-  - Ja aika varmasti sama tapahtuu myös, jos päivittäinen API kutsu antaa virheen
-
-### TODO, ja muita suunnittelukikkaroita, jotka eivät ole varsinaisia vikoja, jotka estäisi käynnistyksen
 - Data race kakun kanssa käynnistyksen yhteydessä
   - Tekee erilliset kutsut, jos valittuna sekä verollinen että veroton samalta alueelta
     - Yksi pitäisi riittää, koska kuitenkin kakutettu data sisältää molemmat, verollisen ja verottoman arvon
   - Luultavasti tapahtuu myös, kun päivittäinen API kutsu lähtee
 - En pysty testaan, toimiiko aikavyöhykemuunnokset oikein koneella, joka ei käytä UTC aikavyöhykettä
   - Paiskaa viestiä, avaa issue tai PR jos huomaat jotain tähän suuntaan olevaa!
-- Ei tarkistuksia, onko päivittäisessä datankeruussa huomisen data mukana
+- Ei tarkistuksia, onko päivittäisessä API kutsussa huomisen data mukana
   - Ei myöskään pakkohakua, jos data puuttuu. Käyttää viimeisintä arvoa, kunnes kokeilee uudestaan seuraavana päivänä 14:30 jälkeen
   - Olisi hyvä olla nappi tai jokin, jolla pakottaa datan päivitys esim WebUI kautta
     - Itse funktio tukee pakkohakua jo valmiiksi
@@ -74,7 +74,7 @@ logger:
     custom_components.spothinta.spothinta_api: debug
 ```
 
-Jos käytät esim. Home Assistant (Core) tai haluat käsin asentaa tämän, kopioi custom_components/spothinta sisältö tänhetkiseen asennukseen esim. näin:
+Jos käytät Home Assistant (Core) tai haluat käsin asentaa tämän, kopioi `custom_components/spothinta` sisältö tänhetkiseen asennukseesi esim. näin:
 ```bash
 cd
 git clone https://github.com/Ondalf/spothinta
