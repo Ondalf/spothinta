@@ -50,11 +50,11 @@ friendly_name: Spot Price FI VAT
 - Outouksia min/max laskussa
   - Arvoihin käytetään koko datasettiä
   - Arvot luetaan vain verollisista hinnoista
-- En ole varmaa, osaako kakku tyhjätä itsensä
+- En ole varma, osaako kakku tyhjätä itsensä
   - Pitänee varmaan kehittää tapa, jolla tyhjätä wanhat arvot pois
   - Kun huomisen hinnat tuli kakkuun, kakun koko tuplaantui (96 -> 192 arvoa)
 - Data race kakun kanssa käynnistyksen yhteydessä
-  - Tekee erilliset kutsut, jos valittuna sekä verollinen että veroton samalta alueelta
+  - Tekee erilliset kutsut, jos valittuna sekä verollinen että veroton sensori samalta alueelta
     - Yksi pitäisi riittää, koska kuitenkin kakutettu data sisältää molemmat, verollisen ja verottoman arvon
   - Luultavasti tapahtuu myös, kun päivittäinen API kutsu lähtee
 - En pysty testaan, toimiiko aikavyöhykemuunnokset oikein koneella, joka ei käytä UTC aikavyöhykettä
