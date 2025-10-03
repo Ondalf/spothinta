@@ -1,0 +1,6 @@
+{
+    "name": "Spot-Hinta Prices", 
+    "render_readme": true,
+    "domains": ["sensor"],
+    "zip_release": false
+}

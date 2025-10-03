@@ -1,0 +1,11 @@
+{
+  "domain": "spothinta",
+  "name": "Spot-Hinta Prices",
+  "version": "0.0.1",
+  "codeowners": ["@Ondalf"],
+  "documentation": "https://github.com/Ondalf/spothinta",
+  "requirements": ["requests","pytz"],
+  "config_flow": true,
+  "issue_tracker": "https://github.com/Ondalf/spothinta/issues",
+  "integration_type": "hub"
+}
